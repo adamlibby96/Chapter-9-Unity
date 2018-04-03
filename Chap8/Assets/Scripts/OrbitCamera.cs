@@ -15,6 +15,7 @@ public class OrbitCamera : MonoBehaviour {
 	void Start () {
         _rotY = transform.eulerAngles.y;
         _offset = target.position - transform.position;
+        
 	}
 	
 	// Update is called once per frame

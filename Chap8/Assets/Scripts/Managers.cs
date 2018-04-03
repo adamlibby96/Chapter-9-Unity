@@ -2,33 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(PlayerManager))]
-[RequireComponent(typeof(InventoryManager))]
-
+[RequireComponent(typeof(WeatherManager))]
 public class Managers : MonoBehaviour {
 
-    public static PlayerManager Player { get; private set; }
-    public static InventoryManager Inventory { get; private set; }
+    public static WeatherManager weather { get; private set; }
 
     private List<IGameManager> _startSequence;
 
     void Awake()
     {
-        Player = GetComponent<PlayerManager>();
-        Inventory = GetComponent<InventoryManager>();
+        weather = GetComponent<WeatherManager>();
 
         _startSequence = new List<IGameManager>();
-        _startSequence.Add(Player);
-        _startSequence.Add(Inventory);
+        _startSequence.Add(weather);
 
         StartCoroutine(StartupManagers());
     }
 
     private IEnumerator StartupManagers()
     {
+        NetworkService network = new NetworkService();
+
         foreach(IGameManager manager in _startSequence)
         {
-            manager.Startup();
+            manager.Startup(network);
         }
 
         yield return null;
@@ -58,14 +55,4 @@ public class Managers : MonoBehaviour {
             Debug.Log("All managers started up");
         }
     }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
